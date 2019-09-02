@@ -1,0 +1,8 @@
+prefix=/home/ELE/lreys/catkin_ws/devel
+
+Name: turtlesim_test
+Description: Description of turtlesim_test
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/ELE/lreys/catkin_ws/devel/lib 
+Requires: message_runtime

@@ -1,0 +1,2 @@
+turtlesim_test
+-DCATKIN_DEVEL_PREFIX=/home/ELE/lreys/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/ELE/lreys/catkin_ws/install -G Unix Makefiles

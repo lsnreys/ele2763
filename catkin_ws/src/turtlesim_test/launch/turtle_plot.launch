@@ -1,0 +1,8 @@
+<launch>
+  <group ns="/my_turtle">
+    <node pkg="turtlesim" name="sim" type="turtlesim_node"/>
+    <rosparam command="load" file="$(find turtlesim_test)/config/turtlesim_param.yaml"/>
+    <node pkg="rqt_plot" name="plot" type="rqt_plot" args="/my_turtle/turtle1/pose/x /my_turtle/turtle1/pose/y /my_turtle/turtle1/pose/theta" />
+  </group>
+
+</launch>
