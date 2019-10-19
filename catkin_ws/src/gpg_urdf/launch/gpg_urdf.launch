@@ -1,0 +1,19 @@
+<launch>
+	<arg name="model" default="$(find gpg_urdf)/urdf/gpg.urdf"/>
+	<arg name="gui" default="true" />
+	<arg name="rvizconfig" default="$(find gpg_urdf)/rviz/urdf.rviz" />
+
+<!--	<include file="$(find gpg_remote)/launch/gpg_remote.launch"/>-->
+
+
+	<group ns="/gpg">
+		<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)"/>
+		<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+		<param name="use_gui" value="$(arg gui)"/>
+		<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+	</group>
+
+<!--	<node name="robot_pose_controller_tf" pkg="gpg_urdf" type="robot_controller_main_tf.py" output = "screen" />-->
+
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+</launch>

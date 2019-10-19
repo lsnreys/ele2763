@@ -1,0 +1,273 @@
+<?xml version="1.0"?>
+<robot name="myrobot">
+    <!-- Link descriptions -->
+    <material name="blue">
+        <color rgba="0 0 0.8 1"/>
+    </material>
+
+    <material name="black">
+        <color rgba="0 0 0 1"/>
+    </material>
+
+    <material name="white">
+        <color rgba="1 1 1 1"/>
+    </material>
+
+    <link name="base_link">
+        <visual>
+              <origin rpy="0 0 0" xyz="0 0 0"/>
+              <geometry>
+                  <box size="0.24 0.10 0.01"/>
+              </geometry>
+              <material name="blue"/>
+        </visual>
+        <collision>
+          <geometry>
+            <box size="0.24 0.10 0.01"/>
+          </geometry>
+        </collision>
+        <inertial>
+          <mass value="0.8"/>
+          <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+        </inertial>
+    </link>
+
+    <gazebo reference="base_link">
+        <mu1 value="200.0"/>
+        <mu2 value="100.0"/>
+        <material>Gazebo/Red</material>
+    </gazebo>
+
+    <link name="right_wheel_link">
+        <visual>
+            <origin rpy="1.57075 0 0" xyz="0 -0.06 0"/>
+            <geometry>
+                <cylinder length="0.025" radius="0.03"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <collision>
+            <origin rpy="1.57075 0 0" xyz="0 -0.06 0"/>
+            <geometry>
+                <cylinder length="0.025" radius="0.03"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="0.5"/>
+            <inertia ixx="0.000138542" ixy="0.0" ixz="0.0" iyy="0.000138542" iyz="0.0" izz="0.000225"/>
+        </inertial>
+    </link>
+
+    <gazebo reference="right_wheel_link">
+        <mu1 value="200.0"/>
+        <mu2 value="100.0"/>
+        <kp value="10000000.0" />
+        <kd value="1.0" />
+        <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <link name="left_wheel_link">
+        <visual>
+            <origin rpy="1.57075 0 0" xyz="0 0.06 0"/>
+            <geometry>
+                <cylinder length="0.025" radius="0.03"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <collision>
+            <origin rpy="1.57075 0 0" xyz="0 0.06 0"/>
+            <geometry>
+                <cylinder length="0.025" radius="0.03"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="0.5"/>
+            <inertia ixx="0.000138542" ixy="0.0" ixz="0.0" iyy="0.000138542" iyz="0.0" izz="0.000225"/>
+        </inertial>
+    </link>
+
+    <gazebo reference="left_wheel_link">
+        <mu1 value="200.0"/>
+        <mu2 value="100.0"/>
+        <kp value="10000000.0" />
+        <kd value="1.0" />
+        <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <link name="middle_wheel_pole_link">
+        <visual>
+            <geometry>
+                <box size="0.01 0.01 0.01"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.01 0.01 0.01"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="0.8"/>
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+        </inertial>
+    </link>
+
+    <link name="middle_wheel_link">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <sphere radius="0.01"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <sphere radius="0.01"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="0.02"/>
+            <inertia ixx="0.00008" ixy="0.0" ixz="0" iyy="0.00008" iyz="0" izz="0.00008"/>
+        </inertial>
+    </link>
+
+    <gazebo reference="middle_wheel_link">
+        <mu1 value="100"/>
+        <mu2 value="50"/>
+        <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <link name="camera_link">
+        <visual>
+            <geometry>
+                <box size="0.005 0.04 0.07"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0.12 0 0.03"/>
+            <geometry>
+                <box size="0.005 0.04 0.07"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="0.05"/>
+            <inertia ixx="0.005" ixy="0.0" ixz="0.0" iyy="0.005" iyz="0.0" izz="0.005"/>
+        </inertial>
+    </link>
+
+    <!-- gazebo camera -->
+    <gazebo reference="camera_link">
+        <sensor type="camera" name="camera1">
+            <update_rate>30.0</update_rate>
+            <camera name="head">
+                <horizontal_fov>0.915</horizontal_fov>
+                <image>
+                    <width>320</width>
+                    <height>240</height>
+                    <format>R8G8B8</format>
+                </image>
+                <clip>
+                    <near>0.02</near>
+                    <far>300</far>
+                </clip>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.007</stddev>
+                </noise>
+            </camera>
+            <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+                <alwaysOn>true</alwaysOn>
+                <updateRate>30.0</updateRate>
+                <cameraName>camera1</cameraName>
+                <imageTopicName>image_raw</imageTopicName>
+                <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+                <frameName>camera_link</frameName>
+                <hackBaseline>0.07</hackBaseline>
+                <distortionK1>0.080938</distortionK1>
+                <distortionK2>-0.257429</distortionK2>
+                <distortionK3>-0.002955</distortionK3>
+                <distortionT1>0.003629</distortionT1>
+                <distortionT2>0.0</distortionT2>
+            </plugin>
+        </sensor>
+    </gazebo>
+
+    <!-- Joint descriptions -->
+    <joint name="left_wheel_joint" type="continuous">
+	    <parent link="base_link"/>
+	    <child link="left_wheel_link"/>
+	    <axis xyz="0 1 0"/>
+	    <limit effort="200" velocity="1"/>
+    </joint>
+
+    <joint name="right_wheel_joint" type="continuous">
+    	<parent link="base_link"/>
+        <child link="right_wheel_link"/>
+        <axis xyz="0 1 0"/>
+        <limit effort="200" velocity="1"/>
+    </joint>
+
+    <joint name="pole_joint" type="fixed">
+    	<parent link="base_link"/>
+        <child link="middle_wheel_pole_link"/>
+        <origin rpy="0 0 0" xyz="0.12 0 -0.005"/>
+    </joint>
+
+    <joint name="middle_wheel_joint" type="continuous">
+    	<parent link="middle_wheel_pole_link"/>
+        <child link="middle_wheel_link"/>
+        <origin rpy="0 0 0" xyz="0 0 -0.015"/>
+        <axis xyz="1 0 0"/>
+        <limit effort="10" velocity="0.1"/>
+    </joint>
+
+    <joint name="servo_joint" type="revolute">
+        <axis xyz="0 0 1"/>
+        <limit effort="1000.0" lower="-0.12" upper="0.12" velocity="0.5"/>
+    	<parent link="base_link"/>
+	    <child link="camera_link"/>
+	    <origin rpy="0 0 0" xyz="0.12 0 0.03"/>
+	    <limit effort="30" velocity="1.0"/>
+    </joint>
+
+    <!-- The following lines are expected to attend the item 2.d of the Exercise 5b -->
+    <!-- Transmissions -->
+    <transmission name="right_wheel_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <actuator name="right_wheel_motor">
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+        <joint name="right_wheel_joint">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </joint>
+    </transmission>
+
+    <transmission name="left_wheel_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <actuator name="left_wheel_motor">
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+        <joint name="left_wheel_joint">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </joint>
+    </transmission>
+
+    <transmission name="servo_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <actuator name="servo_motor">
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+        <joint name="servo_joint">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+    </transmission>
+
+    <!-- The following lines are expected to attend the item 2.e of the Exercise 5b -->
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+          <robotNamespace>/gpg</robotNamespace>
+        </plugin>
+    </gazebo>
+</robot>
