@@ -1,0 +1,45 @@
+<launch>
+    <!--    Arguments that are used to set the desired gazebo world configuration-->
+    <arg name="gui" default="true"/>
+    <arg name="paused" default="false"/>
+    <arg name="set_timeout" default="false"/>
+    <arg name="timeout" default="0.0"/>
+    <arg name="world_name" default="$(find gpg_urdf)/worlds/gpg_bus.world"/>
+    <arg name="urdf_model" default="$(find gpg_urdf)/urdf/gpg.urdf"/>
+    <arg name="rvizconfig" default="$(find gpg_urdf)/rviz/gazebo_camera.rviz" />
+
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(arg world_name)"/>
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="use_sim_time" value="true"/>
+        <arg name="gui" value="$(arg gui)"/>
+        <arg name="headless" value="false"/>
+        <arg name="debug" value="false"/>
+        <arg name="verbose" value="true"/>
+    </include>
+
+    <group ns="/gpg">
+        <!--    Launch the set gazebo world -->
+
+        <!--    gpg urdf model-->
+        <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg urdf_model)"/>
+
+        <!--    push robot_description to factory and spawn robot in gazebo-->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" ns="/gpg"
+            args="-z 1.0 -unpause -urdf -model gpg_robot -param robot_description"
+        respawn="false" output="screen" />
+
+        <node pkg="robot_state_publisher" type="robot_state_publisher" ns="/gpg"   name="robot_state_publisher">
+            <param name="publish_frequency" type="double" value="30.0" />
+        </node>
+
+        <rosparam file="$(find gpg_urdf)/config/controllers.yaml" ns="/gpg" command="load"/>
+        <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+        output="screen" ns="/gpg" args="--shutdown-timeout 1 mobile_base_controller servo_controller joint_state_controller"/>
+
+        <node name="robot_pose_controller_tf" pkg="gpg_urdf" type="robot_controller_main_tf.py" output = "screen" />
+    </group>
+
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+    <node name="fake_depth_publisher_node" pkg="gpg_remote" type="fake_depth_publisher" output = "screen" />
+</launch>
